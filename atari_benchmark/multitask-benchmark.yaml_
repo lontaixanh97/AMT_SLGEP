@@ -1,0 +1,35 @@
+multi-0:
+    names:
+        - Atlantis-ram-v4 
+        - Breakout-ram-v4
+    num_main: 4
+    num_adf: 8
+
+multi-1:
+    names:
+        - Pong-ram-v4 
+        - SpaceInvaders-ram-v4
+    num_main: 6
+    num_adf: 18
+
+multi-2:
+    names:
+        - CrazyClimber-ram-v4 
+        - Enduro-ram-v4
+    num_main: 9
+    num_adf: 18
+
+multi-3:
+    names:
+        - Boxing-ram-v4 
+        - Seaquest-ram-v4
+    num_main: 18
+    num_adf: 36
+
+multi-4:
+    names:
+        - Breakout-ram-v4 
+        - Pong-ram-v4
+    num_main: 6
+    num_adf: 12
+

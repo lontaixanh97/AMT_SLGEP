@@ -1,0 +1,47 @@
+single-0:
+    names:
+        - Atlantis-ram-v4 
+    num_main: 4
+    num_adf: 8
+
+single-1:
+    names:
+        - Boxing-ram-v4 
+    num_main: 18
+    num_adf: 36
+
+single-2:
+    names:
+        - Breakout-ram-v4 
+    num_main: 4
+    num_adf: 8
+
+single-3:
+    names:
+        - CrazyClimber-ram-v4 
+    num_main: 9
+    num_adf: 18
+
+single-4:
+    names:
+        - Enduro-ram-v4 
+    num_main: 9
+    num_adf: 18
+
+single-5:
+    names:
+        - Pong-ram-v4 
+    num_main: 6
+    num_adf: 12
+
+single-6:
+    names:
+        - Seaquest-ram-v4 
+    num_main: 18
+    num_adf: 36
+
+single-7:
+    names:
+        - SpaceInvaders-ram-v4 
+    num_main: 6
+    num_adf: 12

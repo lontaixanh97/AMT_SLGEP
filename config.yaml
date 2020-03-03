@@ -1,0 +1,18 @@
+# parameter of Genetic Program Model
+h_main: 10
+h_adf: 3
+max_arity: 2
+num_terminal: 128
+
+# parameter of Optimization Algorithms
+num_iter: 100
+pop_size: 10
+rmp: 1
+
+# Template for parameter of Problem
+# These paramerter below will be modified
+names:
+    - Atlantis-ram-v4
+num_main: 4
+num_adf: 8
+

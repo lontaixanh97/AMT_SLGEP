@@ -1,0 +1,15 @@
+single-0:
+    name:
+        - Atlantis-ram-v4 
+    num_main: 4
+    num_adf: 8
+    h_mains: 
+        - 9
+
+single-1:
+    name:
+        - Atlantis-ram-v4 
+    num_main: 4
+    num_adf: 8
+    h_mains: 
+        - 10

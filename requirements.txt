@@ -1,0 +1,7 @@
+joblib
+numpy
+pyyaml
+scipy
+tqdm
+gym
+gym[atari]
