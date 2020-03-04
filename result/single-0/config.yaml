@@ -1,12 +1,12 @@
-dim: 140
+dim: 132
 h_adf: 3
-h_main: 10
+h_main: 9
 h_mains: [9]
 l_adf: 4
-l_main: 11
+l_main: 10
 main: []
 max_arity: 2
-mutation_rate: 0.05
+mutation_rate: 0.05303030303030303
 name: [Atlantis-ram-v4]
 names: [Atlantis-ram-v4]
 num_adf: 8

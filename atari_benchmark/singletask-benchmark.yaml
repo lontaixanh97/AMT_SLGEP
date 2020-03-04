@@ -5,6 +5,7 @@ single-0:
     num_adf: 8
     h_mains: 
         - 9
+    h_main: 9
 
 single-1:
     name:
