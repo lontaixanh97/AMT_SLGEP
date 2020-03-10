@@ -65,14 +65,18 @@ class ProbabilityModel:  # Works reliably for 2(+) Dimensional distributions
         pop, self.vars = solutions.shape
         if self.modeltype == 'mvarnorm':
             self.mean_true = np.mean(solutions, 0)
+            # Tính ma trận hiệp phương sai của solutions. Ma trận hiệp phương sai có đường chéo chính là phương sai
+            # của các mẫu dữ liệu theo từng chiều
             covariance = np.cov(solutions)
-            self.covarmat_true = np.diag(np.diag(
-                covariance))  # Simplifying to univariate distribution by ignoring off diagonal terms of covariance matrix
+            # Simplifying to univariate distribution by ignoring off diagonal terms of covariance matrix
+            # Giữ lại đường chéo chính của ma trận hiệp phương sai
+            self.covarmat_true = np.diag(np.diag(covariance))
+            # Thêm 10% noise để tránh overfit
             solutions_noisy = np.append(solutions, np.random.rand(round(0.1 * pop), self.vars), 0)
             self.mean_noisy = np.mean(solutions_noisy, 0)
             covariance = np.cov(solutions_noisy)
-            self.covarmat_noisy = np.diag(np.diag(
-                covariance))  # Simplifying to univariate distribution by ignoring off diagonal terms of covariance matrix
+            # Simplifying to univariate distribution by ignoring off diagonal terms of covariance matrix
+            self.covarmat_noisy = np.diag(np.diag(covariance))
             self.covarmat_noisy = np.cov(solutions_noisy)
         elif self.modeltype == 'umd':
             self.probofone_true = np.mean(solutions, 0)

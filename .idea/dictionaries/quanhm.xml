@@ -2,7 +2,13 @@
   <dictionary name="quanhm">
     <words>
       <w>buildmodel</w>
+      <w>fitnesses</w>
+      <w>modeltype</w>
+      <w>multifactorial</w>
+      <w>mvarnorm</w>
       <w>probofone</w>
+      <w>singletask</w>
+      <w>taskset</w>
     </words>
   </dictionary>
 </component>

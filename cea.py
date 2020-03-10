@@ -1,15 +1,20 @@
+import os
 from atari_benchmark import *
 from slgep_lib import *
 from mfea_lib import *
 from utils import Evaluator
+from tools import Tools
 
 from joblib import Parallel, delayed
 from os import cpu_count
 from tqdm import trange
+from probability_models.probability_model import ProbabilityModel
 from time import time
 
 
-def cea(config, callback):
+def cea(config, callback, addr="problems"):
+    # all model
+    all_models = Tools.load_from_file(os.path.join(addr, 'all_models'))
     # Problem
     taskset = Taskset(config)
 
@@ -68,7 +73,6 @@ def cea(config, callback):
             population[N + i, :], population[N + i + 1, :] = c1[:], c2[:]
             skill_factor[N + i] = sf1
             skill_factor[N + i + 1] = sf1
-
         # evaluation
         delayed_functions = []
         for i in range(2 * N):
@@ -95,3 +99,9 @@ def cea(config, callback):
         desc = 'gen:{} fitness:{} message:{} K:{}'.format(t, ' '.join(
             '{:0.2f}|{:0.2f}|{:0.2f}'.format(res.fun, res.mean, res.std) for res in results), message, K)
         iterator.set_description(desc)
+
+    # build ProbabilityModel
+    model = ProbabilityModel('mvarnorm')
+    model.buildmodel(population)
+    all_models.append(model)
+    Tools.save_to_file(os.path.join(addr, 'all_models'), all_models)
