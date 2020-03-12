@@ -89,8 +89,8 @@ def AMT_BGA(config, reps, trans, addr="problems"):
             if transfer and i % TrInt == 0:
                 mmodel = MixtureModel(all_models)
                 mmodel.createtable(population, True, 'umd')
-                mmodel.EMstacking();  # Recombination of probability models
-                mmodel.mutate();  # Mutation of stacked probability model
+                mmodel.EMstacking()  # Recombination of probability models
+                mmodel.mutate()  # Mutation of stacked probability model
                 offspring = mmodel.sample(pop)
                 alpha_rep.append(mmodel.alpha)
                 print('Transfer coefficient at generation ', str(i), ': ', str(mmodel.alpha))

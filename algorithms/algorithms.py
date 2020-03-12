@@ -91,10 +91,9 @@ def AMT_BGA(problem, dims, reps, trans, fitness_func='toy_problem', addr="proble
     fitness_hist = np.zeros((reps, gen))
     bestSol = np.zeros((reps, dims))
     alpha = [None] * (reps)
-
+    population = np.round(np.random.rand(pop, dims))
     for rep in range(reps):
         alpha_rep = []
-        population = np.round(np.random.rand(pop, dims))
         if fitness_func == 'toy_problem':
             fitness = fitness_eval(population, problem, dims)
         else:
@@ -109,8 +108,8 @@ def AMT_BGA(problem, dims, reps, trans, fitness_func='toy_problem', addr="proble
             if transfer and i % TrInt == 0:
                 mmodel = MixtureModel(all_models)
                 mmodel.createtable(population, True, 'umd')
-                mmodel.EMstacking();  # Recombination of probability models
-                mmodel.mutate();  # Mutation of stacked probability model
+                mmodel.EMstacking()  # Recombination of probability models
+                mmodel.mutate()  # Mutation of stacked probability model
                 offspring = mmodel.sample(pop)
                 alpha_rep.append(mmodel.alpha)
                 print('Transfer coefficient at generation ', str(i), ': ', str(mmodel.alpha))
