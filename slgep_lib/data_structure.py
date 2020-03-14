@@ -68,8 +68,8 @@ FUNCTION_SET = [
     {'name': '-', 'func': lambda a, b: subtract(a, b), 'arity': 2},
     {'name': '*', 'func': lambda a, b: multiply(a, b), 'arity': 2},
     {'name': '/', 'func': lambda a, b: divide(a, b), 'arity': 2},
-    {'name': 'sin', 'func': lambda a: np.sin(a), 'arity': 1},
-    {'name': 'cos', 'func': lambda a: np.cos(a), 'arity': 1},
+    # {'name': 'sin', 'func': lambda a: np.sin(a), 'arity': 1},
+    # {'name': 'cos', 'func': lambda a: np.cos(a), 'arity': 1},
     {'name': 'e^x', 'func': lambda a: exp(a), 'arity': 1},
     {'name': 'ln|x|', 'func': lambda a: log(np.abs(a)), 'arity': 1}
 ]

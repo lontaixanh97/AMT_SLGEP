@@ -50,7 +50,8 @@ def cea(config, callback, addr="problems"):
     scalar_fitness = calculate_scalar_fitness(factorial_cost)
 
     # Evolve
-    iterator = trange(T)
+    # iterator = trange(T)
+    iterator = trange(10)
     for t in iterator:
         # permute current population
         permutation_index = np.random.permutation(N)

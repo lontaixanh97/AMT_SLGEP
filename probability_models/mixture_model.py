@@ -91,7 +91,7 @@ class MixtureModel:  # Works reliably for 2(+) Dimensional distributions
                 self.probtable[i, self.noms - 1] = tmodel.pdfeval(solutions[i, :].reshape(1, -1))
 
         else:
-            nos = solutions.shape[0];
+            nos = solutions.shape[0]
             self.probtable = np.ones((nos, self.noms))
             for j in range(self.noms):
                 self.probtable[:, j] = self.model_list[j].pdfeval(solutions)

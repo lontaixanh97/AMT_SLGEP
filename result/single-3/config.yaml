@@ -4,18 +4,32 @@ h_adf: 3
 h_main: 8
 h_main_multitask: !!python/object/apply:numpy.core.multiarray.scalar
 - !!python/object/apply:numpy.dtype
-  args: [i8, 0, 1]
-  state: !!python/tuple [3, <, null, null, null, -1, -1, 0]
+  args:
+  - i8
+  - 0
+  - 1
+  state: !!python/tuple
+  - 3
+  - <
+  - null
+  - null
+  - null
+  - -1
+  - -1
+  - 0
 - !!binary |
   BgAAAAAAAAA=
-h_mains: [8]
+h_mains:
+- 8
 l_adf: 4
 l_main: 9
 main: []
 max_arity: 2
 mutation_rate: 0.056451612903225805
-name: [Atlantis-ram-v4]
-names: [Atlantis-ram-v4]
+name:
+- Atlantis-ram-v4
+names:
+- Atlantis-ram-v4
 num_adf: 8
 num_iter: 100
 num_main: 4

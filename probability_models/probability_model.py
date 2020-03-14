@@ -1,7 +1,6 @@
 import numpy as np
 from scipy.stats import multivariate_normal
 
-
 class ProbabilityModel:  # Works reliably for 2(+) Dimensional distributions
     """ properties
         modeltype; % multivariate normal ('mvarnorm' - for real coded) or univariate marginal distribution ('umd' - for binary coded)    
@@ -46,9 +45,11 @@ class ProbabilityModel:  # Works reliably for 2(+) Dimensional distributions
         """
 
         if self.modeltype == 'mvarnorm':
-            mvn = multivariate_normal(self.mean_noisy,
-                                      self.covarmat_noisy)  # create a multivariate Gaussian object with specified mean and covariance matrix
-            probofsols = mvn.pdf(solutions)
+            # create a multivariate Gaussian object with specified mean and covariance matrix
+            # mvn = multivariate_normal(self.mean_noisy, self.covarmat_noisy)
+            # print('abc', mvn.shape)
+            # probofsols = mvn.pdf(solutions)
+            probofsols = multivariate_normal.pdf(solutions, self.mean_noisy, self.covarmat_noisy)
         elif self.modeltype == 'umd':
             nos = solutions.shape[0]
             probofsols = np.zeros(nos)
@@ -64,7 +65,7 @@ class ProbabilityModel:  # Works reliably for 2(+) Dimensional distributions
     def buildmodel(self, solutions):
         pop, self.vars = solutions.shape
         if self.modeltype == 'mvarnorm':
-            self.mean_true = np.mean(solutions, 0)
+            self.mean_true = np.mean(solutions.T, 0)
             # Tính ma trận hiệp phương sai của solutions. Ma trận hiệp phương sai có đường chéo chính là phương sai
             # của các mẫu dữ liệu theo từng chiều
             covariance = np.cov(solutions)
@@ -73,11 +74,13 @@ class ProbabilityModel:  # Works reliably for 2(+) Dimensional distributions
             self.covarmat_true = np.diag(np.diag(covariance))
             # Thêm 10% noise để tránh overfit
             solutions_noisy = np.append(solutions, np.random.rand(round(0.1 * pop), self.vars), 0)
-            self.mean_noisy = np.mean(solutions_noisy, 0)
+            self.mean_noisy = np.mean(solutions_noisy.T, 0)
+            print(self.mean_noisy.shape)
             covariance = np.cov(solutions_noisy)
             # Simplifying to univariate distribution by ignoring off diagonal terms of covariance matrix
             self.covarmat_noisy = np.diag(np.diag(covariance))
             self.covarmat_noisy = np.cov(solutions_noisy)
+            print(self.covarmat_noisy.shape)
         elif self.modeltype == 'umd':
             self.probofone_true = np.mean(solutions, 0)
             # print(self.probofone_true)
