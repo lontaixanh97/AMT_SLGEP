@@ -119,6 +119,25 @@ class ChromosomeFactory:
             # Tail of ADF: adf_terminal_set
             return R2, R3
 
+    def get_feasible_range(self, i):
+        R1, R2, R3, R4 = self.chromosome_range
+        config = self.config
+        # gene at i belong to one of the given mains
+        if i < config['num_main'] * (config['h_main'] + config['l_main']):
+            if i % (config['h_main'] + config['l_main']) < config['h_main']:
+                # Head of main: adf_set and function_set
+                return 0, R2
+            else:
+                # Tail of main: terminal_set
+                return R3, R4
+        if (i - config['num_main'] * (config['h_main'] + config['l_main'])) % \
+                (config['h_adf'] + config['l_adf']) < config['h_adf']:
+            # Head of ADF: function_set
+            return 0, R1
+        else:
+            # Tail of ADF: adf_terminal_set
+            return R2, R3
+
     def initialize(self):
         config = self.config
         population = np.empty([config['pop_size'] * config['K'] * 2, config['dim']])

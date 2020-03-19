@@ -33,3 +33,21 @@ single-3:
     h_mains:
         - 8
     h_main: 8
+
+single-4:
+    name:
+        - Breakout-ram-v4
+    num_main: 4
+    num_adf: 8
+    h_mains:
+        - 8
+    h_main: 8
+
+single-5:
+    name:
+        - Pong-ram-v4
+    num_main: 4
+    num_adf: 8
+    h_mains:
+        - 8
+    h_main: 8

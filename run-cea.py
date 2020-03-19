@@ -16,7 +16,7 @@ config = yaml.load(open('config.yaml').read())
 singletask_benchmark = yaml.load(open('atari_benchmark/singletask-benchmark.yaml').read())
 
 seeds = [0]
-instances = ['single-2', 'single-3']
+instances = ['single-3', 'single-4']
 
 for seed in seeds:
     for instance in instances:

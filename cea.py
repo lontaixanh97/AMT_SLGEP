@@ -93,7 +93,7 @@ def cea(config, callback, addr="problems"):
         scalar_fitness = scalar_fitness[sort_index]
 
         # optimization info
-        message = {'algorithm': 'cea', 'instance': config['names']}
+        message = {'algorithm': 'cea', 'instance': config['name']}
         results = get_optimization_results(t, population, factorial_cost, scalar_fitness, skill_factor, message)
         if callback:
             callback(results)
@@ -103,6 +103,6 @@ def cea(config, callback, addr="problems"):
 
     # build ProbabilityModel
     model = ProbabilityModel('mvarnorm')
-    model.buildmodel(population)
+    model.buildmodel(population, config)
     all_models.append(model)
     Tools.save_to_file(os.path.join(addr, 'all_models'), all_models)

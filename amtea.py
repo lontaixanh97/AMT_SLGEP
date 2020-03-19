@@ -1,4 +1,6 @@
 import os
+import yaml
+
 import numpy as np
 
 from probability_models.probability_model import ProbabilityModel
@@ -13,115 +15,130 @@ from tools import Tools
 from joblib import Parallel, delayed
 from os import cpu_count
 from tqdm import trange
+np.seterr(under='ignore')
 
+# AMTEA solving KP_wc_ak
+reps = 30
+TrInt = 2
 
-def AMT_BGA(config, reps, trans, addr="problems"):
-    """[bestSol, fitness_hist, alpha] = TSBGA(problem, dims, reps, trans): Adaptive
-        Model-based Transfer Binary GA. The crossover and mutation for this simple
-        binary GA are uniform crossover and bit-flip mutation.
-        INPUT:
-         problem: problem type, 'onemax', 'onemin', or 'trap5'
-         dims: problem dimensionality
-         reps: number of repeated trial runs
-         trans:    trans.transfer: binary variable
-                   trans.TrInt: transfer interval for AMT
+# Load configuration
+config = yaml.load(open('config.yaml').read())
 
-        OUTPUT:
-         bestSol: best solution for each repetiion
-         fitness: history of best fitness for each generation
-         alpha: transfer coefficient
-    """
-    transfer = trans['transfer']
-    if transfer:
-        TrInt = trans['TrInt']
-        all_models = Tools.load_from_file(os.path.join(addr, 'all_models'))
+# Load benchmark
+singletask_benchmark = yaml.load(open('atari_benchmark/singletask-benchmark.yaml').read())
+data = singletask_benchmark['single-5']
+config.update(data)
+config = wrap_config(config)
 
-    # Problem
-    taskset = Taskset(config)
+all_models = Tools.load_from_file(os.path.join('problems', 'all_models'))
 
-    # Model
-    cf = ChromosomeFactory(config)
+# Problem
+taskset = Taskset(config)
 
-    # Simple parameter
-    K = taskset.K
-    config['K'] = K
-    N = config['pop_size'] * K
-    T = config['num_iter']
-    mutation_rate = config['mutation_rate']
+# Model
+cf = ChromosomeFactory(config)
 
-    # Initialization
-    population = cf.initialize()
-    skill_factor = np.array([i % K for i in range(2 * N)])
-    factorial_cost = np.full([2 * N, K], np.inf)
-    scalar_fitness = np.empty([2 * N])
+# Simple parameter
+K = taskset.K
+config['K'] = K
+N = config['pop_size'] * K
+T = config['num_iter']
+dims = config['dim']
+mutation_rate = config['mutation_rate']
+
+bestSol = np.zeros((reps, dims))
+alpha = [None] * (reps)
+
+# Initialization
+population = cf.initialize()
+# skill_factor = np.array([i % K for i in range(2 * N)])
+# factorial_cost = np.full([2 * N, K], np.inf)
+# scalar_fitness = np.empty([2 * N])
+
+for rep in range(reps):
+    alpha_rep = []
 
     # For parallel evaluation
     print('[+] Initializing evaluators')
-    evaluators = [Evaluator(config) for _ in range(2 * N)]
+    evaluators = Evaluator(config)
+    # [Evaluator(config) for _ in range(2 * N)]
 
     # First evaluation (sequential)
-    delayed_functions = []
-    for i in range(2 * N):
-        sf = skill_factor[i]
-        delayed_functions.append(delayed(evaluators[i].evaluate)(population[i], sf))
-    fitnesses = Parallel(n_jobs=cpu_count())(delayed_functions)
-    for i in range(2 * N):
-        sf = skill_factor[i]
-        factorial_cost[i, sf] = fitnesses[i]
-    scalar_fitness = calculate_scalar_fitness(factorial_cost)
+    # delayed_functions = []
+    # for i in range(2 * N):
+    #     sf = skill_factor[i]
+    #     delayed_functions.append(delayed(evaluators[i].evaluate)(population[i], sf))
+    # fitnesses = Parallel(n_jobs=cpu_count())(delayed_functions)
+    # for i in range(2 * N):
+    #     sf = skill_factor[i]
+    #     factorial_cost[i, sf] = fitnesses[i]
+    # scalar_fitness = calculate_scalar_fitness(factorial_cost)
+    fitnesses = [evaluators.evaluate(x, 0) for x in population]
 
+    # Evolve
+    #     iterator = trange(T)
+    iterator = trange(10)
+    for t in iterator:
 
+        # permute current population
+        permutation_index = np.random.permutation(N)
+        population[:N] = population[:N][permutation_index]
+        # skill_factor[:N] = skill_factor[:N][permutation_index]
+        # factorial_cost[:N] = factorial_cost[:N][permutation_index]
+        # factorial_cost[N:] = np.inf
 
-    for rep in range(reps):
-        alpha_rep = []
-        population = np.round(np.random.rand(pop, dims))
-        if fitness_func == 'toy_problem':
-            fitness = fitness_eval(population, problem, dims)
+        # As we consider all the population as parents, we don't samplt P^{s}
+        if t % TrInt == 0:
+            mmodel = MixtureModel(all_models)
+            mmodel.createtable(population, True, 'mvarnorm', config)
+            mmodel.EMstacking()  # Recombination of probability models
+            mmodel.mutate()  # Mutation of stacked probability model
+            population = mmodel.sample(2 * N, config)
+            # with np.printoptions(threshold=np.inf):
+            #     print(population)
+            alpha_rep.append(mmodel.alpha)
+            print('Transfer coefficient at generation ', str(t), ': ', str(mmodel.alpha))
         else:
-            fitness = knapsack_fitness_eval(population, problem, dims, pop)
-        ind = np.argmax(fitness)
-        best_fit = fitness[ind]
-        print('Generation 0 best fitness = ', str(best_fit))
-        fitness_hist[rep, 0] = best_fit
+            # select pair to crossover
+            for i in range(0, N, 2):
+                # extract parent
+                p1 = population[i]
+                # sf1 = skill_factor[i]
+                p2 = population[i+1]
+                # recombine parent
+                c1, c2 = cf.one_point_crossover_adf(p1, p2)
+                c1 = cf.uniform_mutate(c1, mutation_rate)
+                c2 = cf.uniform_mutate(c2, mutation_rate)
+                # save child
+                population[N + i, :], population[N + i + 1, :] = c1[:], c2[:]
+                # skill_factor[N + i] = sf1
+                # skill_factor[N + i + 1] = sf1
 
-        for i in range(1, gen):
-            # As we consider all the population as parents, we don't samplt P^{s}
-            if transfer and i % TrInt == 0:
-                mmodel = MixtureModel(all_models)
-                mmodel.createtable(population, True, 'umd')
-                mmodel.EMstacking()  # Recombination of probability models
-                mmodel.mutate()  # Mutation of stacked probability model
-                offspring = mmodel.sample(pop)
-                alpha_rep.append(mmodel.alpha)
-                print('Transfer coefficient at generation ', str(i), ': ', str(mmodel.alpha))
+        fitnesses = [evaluators.evaluate(x, 0) for x in population]
+        #         # evaluation
+        #         delayed_functions = []
+        #         for i in range(2 * N):
+        #             sf = skill_factor[i]
+        #             delayed_functions.append(delayed(evaluators[i].evaluate)(population[i], sf))
+        #         fitnesses = Parallel(n_jobs=cpu_count())(delayed_functions)
 
-            else:
-                parent1 = population[np.random.permutation(pop), :]
-                parent2 = population[np.random.permutation(pop), :]
-                tmp = np.random.rand(pop, dims)
-                offspring = np.zeros((pop, dims))
-                index = tmp >= 0.5
-                offspring[index] = parent1[index]
-                index = tmp < 0.5
-                offspring[index] = parent2[index]
-                tmp = np.random.rand(pop, dims)
-                index = tmp < (1 / dims)
-                offspring[index] = np.abs(1 - offspring[index])
+        # for i in range(2 * N):
+        #     sf = skill_factor[i]
+        #     factorial_cost[i, sf] = fitnesses[i]
+        # scalar_fitness = calculate_scalar_fitness(factorial_cost)
 
-            if fitness_func == 'toy_problem':
-                cfitness = fitness_eval(population, problem, dims)
-            else:
-                cfitness = knapsack_fitness_eval(population, problem, dims, pop)
-            interpop = np.append(population, offspring, 0)
-            interfitness = np.append(fitness, cfitness)
-            index = np.argsort((-interfitness))
-            interfitness = interfitness[index]
-            fitness = interfitness[:pop]
-            interpop = interpop[index, :]
-            population = interpop[:pop, :]
-            print('Generation ', str(i), ' best fitness = ', str(np.max(fitness_hist)))
-            fitness_hist[rep, i] = fitness[0]
+        # sort
+        sort_index = np.argsort(fitnesses)[::-1]
+        population = population[sort_index]
+        # skill_factor = skill_factor[sort_index]
+        # factorial_cost = factorial_cost[sort_index]
+        # scalar_fitness = scalar_fitness[sort_index]
 
-        alpha[rep] = alpha_rep
-        bestSol[rep, :] = population[ind, :]
-    return bestSol, fitness_hist, alpha
+        # optimization info
+        message = {'algorithm': 'cea', 'instance': config['names']}
+        # results = get_optimization_results(t, population, factorial_cost, scalar_fitness, skill_factor, message)
+        desc = 'gen:{} fitness:{} message:{} K:{}'.format(t, ' '.join(
+            '{:0.2f}|{:0.2f}|{:0.2f}'.format(np.max(fitnesses), np.mean(fitnesses), np.std(fitnesses))), message)
+        iterator.set_description(desc)
+
+

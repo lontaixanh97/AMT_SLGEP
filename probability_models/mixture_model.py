@@ -26,8 +26,11 @@ class MixtureModel:  # Works reliably for 2(+) Dimensional distributions
         for i in range(iterations):
             talpha = deepcopy(self.alpha)  # Probability of every model (mixture weights) $\alpha$ in the main paper
             probvector = np.dot(self.probtable, talpha.T)
+            # print('probvector', probvector)
+            # print('protable', self.probtable)
             for j in range(self.noms):
-                # according to this, if model j give a greater probability to each solution of target problem, it is more likely to have a greater alpha
+                # according to this, if model j give a greater probability to each solution of target problem,
+                # it is more likely to have a greater alpha
                 talpha[j] = sum((1 / self.nsols) * talpha[j] * self.probtable[:, j] / probvector)
             self.alpha = talpha
 
@@ -38,7 +41,7 @@ class MixtureModel:  # Works reliably for 2(+) Dimensional distributions
 
         # print('modifalpha', self.alpha)
         modifalpha = self.alpha + np.random.normal(0, 0.01,
-                                                   self.noms);  # Determining std dev for mutation can be a parameteric study
+                                                   self.noms)  # Determining std dev for mutation can be a parameteric study
         # print('modifalpha', modifalpha)
         pusum = np.sum(modifalpha)
         if pusum == 0:  # Then complete weightage assigned to target model alone
@@ -47,37 +50,37 @@ class MixtureModel:  # Works reliably for 2(+) Dimensional distributions
         else:
             self.alpha = modifalpha / pusum
 
-    def sample(self, nos):
+    def sample(self, nos, config):
         # print(self.alpha)
         indsamples = np.ceil(nos * self.alpha)
         # print('indsamples', indsamples)
         totalsamples = int(np.sum(indsamples))
         if indsamples[0] <= 0:
-            solutions = self.model_list[0].sample(0)  # added for np.append to work
+            solutions = self.model_list[0].sample(0, config)  # added for np.append to work
         else:
-            solutions = self.model_list[0].sample(indsamples[0])
+            solutions = self.model_list[0].sample(indsamples[0], config)
         # print('solutions_0 ', solutions.shape)
         for i in range(1, self.noms):
             if indsamples[i] <= 0:
                 continue
             else:
-                sols = self.model_list[i].sample(indsamples[i]);
+                sols = self.model_list[i].sample(indsamples[i], config)
                 solutions = np.append(solutions, sols, 0)
         # print('solutions_n ', solutions.shape)
         # print('totalsamples ', totalsamples)
         # print('np.random.permutation(totalsamples)', np.random.permutation(totalsamples).shape)
-        solutions = solutions[np.random.permutation(totalsamples), :];
+        solutions = solutions[np.random.permutation(totalsamples), :]
         solutions = solutions[:nos, :]
-        return solutions
+        return np.round(solutions)
 
-    def createtable(self, solutions, CV, c_type):
+    def createtable(self, solutions, CV, c_type, config):
         if CV:
             self.noms = self.noms + 1  # NOTE: Last model in the list is the target model
             # print('self.noms', self.noms)
             self.model_list.append(ProbabilityModel(c_type))
             # print('len(self.model_list)', len(self.model_list))
             #             self.model_list[self.noms] = ProbabilityModel(c_type)
-            self.model_list[self.noms - 1].buildmodel(solutions)
+            self.model_list[self.noms - 1].buildmodel(solutions, config)
             self.alpha = (1 / self.noms) * np.ones(self.noms)
             nos = solutions.shape[0]
             self.probtable = np.ones((nos, self.noms))
@@ -87,8 +90,9 @@ class MixtureModel:  # Works reliably for 2(+) Dimensional distributions
             for i in range(nos):  # Leave-one-out cross validation scheme
                 x = np.append(solutions[:i, :], solutions[i + 1:, :], 0)
                 tmodel = ProbabilityModel(c_type)
-                tmodel.buildmodel(x)
+                tmodel.buildmodel(x, config)
                 self.probtable[i, self.noms - 1] = tmodel.pdfeval(solutions[i, :].reshape(1, -1))
+                # print('protable:', self.probtable)
 
         else:
             nos = solutions.shape[0]

@@ -2,23 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8297d870-fd5a-40a2-9df8-91c3366b9e5f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/AMT+SLGEP.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AMT+SLGEP.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/TEST_AMTEA-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/TEST_AMTEA-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Test SLGEP-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Test SLGEP-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TEST_AMTEA.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/TEST_AMTEA.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test SLGEP.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Test SLGEP.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/amtea.py" beforeDir="false" afterPath="$PROJECT_DIR$/amtea.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/atari_benchmark/singletask-benchmark.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/atari_benchmark/singletask-benchmark.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cea.py" beforeDir="false" afterPath="$PROJECT_DIR$/cea.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/probability_models/mixture_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/probability_models/mixture_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/probability_models/probability_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/probability_models/probability_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/problems/all_models.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/problems/all_models.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/single-2/0.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/result/single-2/0.pkl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/single-2/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/result/single-2/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/single-2/0.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/single-2/config.yaml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/result/single-3/0.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/result/single-3/0.pkl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/single-3/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/result/single-3/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/slgep_lib/data_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/slgep_lib/data_structure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-cea.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-cea.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/slgep_lib/chromosome.py" beforeDir="false" afterPath="$PROJECT_DIR$/slgep_lib/chromosome.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +58,8 @@
       <workItem from="1583199197309" duration="58186000" />
       <workItem from="1584019994203" duration="885000" />
       <workItem from="1584022732124" duration="6073000" />
-      <workItem from="1584151999403" duration="5469000" />
+      <workItem from="1584151999403" duration="12005000" />
+      <workItem from="1584545035355" duration="32821000" />
     </task>
     <servers />
   </component>
@@ -66,13 +67,25 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="2282" y="514" width="702" height="391" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1584551033681">
+      <screen x="1920" y="312" width="1366" height="768" />
+    </state>
+    <state x="2282" y="514" width="702" height="391" key="#com.intellij.fileTypes.FileTypeChooser/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1584551033681" />
+    <state x="462" y="155" key="FileChooserDialogImpl" timestamp="1584610370217">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="462" y="155" key="FileChooserDialogImpl/1920.312.1366.768/0.27.1366.741@0.27.1366.741" timestamp="1584610370217" />
     <state x="2077" y="344" width="1052" height="731" key="SettingsEditor" timestamp="1584020012045">
       <screen x="1920" y="312" width="1366" height="768" />
     </state>
     <state x="2077" y="344" width="1052" height="731" key="SettingsEditor/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1584020012045" />
-    <state x="2239" y="537" key="com.intellij.ide.util.TipDialog" timestamp="1584152011764">
+    <state x="2239" y="537" key="com.intellij.ide.util.TipDialog" timestamp="1584545035447">
       <screen x="1920" y="312" width="1366" height="768" />
     </state>
-    <state x="2239" y="537" key="com.intellij.ide.util.TipDialog/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1584152011764" />
+    <state x="2239" y="537" key="com.intellij.ide.util.TipDialog/1920.312.1366.768/0.339.1920.741@1920.312.1366.768" timestamp="1584545035447" />
+    <state x="301" y="128" width="763" height="538" key="find.popup" timestamp="1584607300229">
+      <screen x="0" y="27" width="1366" height="741" />
+    </state>
+    <state x="301" y="128" width="763" height="538" key="find.popup/1920.312.1366.768/0.27.1366.741@0.27.1366.741" timestamp="1584607300229" />
   </component>
 </project>
