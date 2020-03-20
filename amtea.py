@@ -17,7 +17,6 @@ from os import cpu_count
 from tqdm import trange
 np.seterr(under='ignore')
 
-# AMTEA solving KP_wc_ak
 reps = 30
 TrInt = 2
 
